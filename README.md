@@ -29,3 +29,6 @@ Runs on port 4000.
 - `curl 'http://localhost:4000/publish/muminfigurer?mode=term-swefin'`
 
 - `curl 'http://localhost:4000/search?q=o&subtype=muminfigurer&mode=term-swefin' -i`
+
+# Adding wordlists
+See [the docs](/docs/add_newlang.md)
