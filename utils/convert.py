@@ -1,12 +1,12 @@
 # coding:utf-8
-""" Convert lexicon entries from json to html """
+"""Convert lexicon entries from json to html."""
 import logging
 import re
 import xml.etree.ElementTree as etree
 
 
 def format_posts(ans, mode, toformat='html', css=''):
-    " Helper for formatting a search result "
+    """Convert a Karp result into a given format."""
     logging.debug('will format')
     hits = ans.get('hits', {}).get('hits', [])
     func = mode_conv.get(mode, default)
@@ -15,11 +15,10 @@ def format_posts(ans, mode, toformat='html', css=''):
 
 
 def termswefin(objs, css=''):
-    """ Converts a list of term-swefin objects to HTML.
-        The HTML header and the CSS template are written by
-        Eva Lindström (evali@ling.su) and
-        Gunnar Eriksson (gunnar.eriksson@sprakochfolkminnen.se)
-        at Språkrådet, May 2018.
+    """Convert a list of term-swefin objects to HTML.
+
+    The HTML header and the CSS template are written by Eva Lindström (evali@ling.su)
+    and Gunnar Eriksson (gunnar.eriksson@sprakochfolkminnen.se) at Språkrådet, May 2018.
     """
     # '<!DOCTYPE html>' is added after parsing, to avoid parser confusion
     # Make sure all tags are properly closed, to avoid xml parser confusion
@@ -28,29 +27,29 @@ def termswefin(objs, css=''):
     header = """
     <html lang="sv">
        <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<link rel="stylesheet" type="text/css" href="{css}"/>
-	<link rel="icon" href=" http://liljeholmen.sprakochfolkminnen.se/favicon1.jpg" type="image/gif"/>
-	<title>Sverigefinska ordlistor från Språkrådet</title>
-	<meta name="description" content="Sverigefinska ordlistor från Språkrådet"/>
-	<meta name="keywords" content="sverigefinska, lexikon, svenska, finska, finska i Sverige, öppna data, Språkrådet, ISOF"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="{css}"/>
+        <link rel="icon" href=" http://liljeholmen.sprakochfolkminnen.se/favicon1.jpg" type="image/gif"/>
+        <title>Sverigefinska ordlistor från Språkrådet</title>
+        <meta name="description" content="Sverigefinska ordlistor från Språkrådet"/>
+        <meta name="keywords" content="sverigefinska, lexikon, svenska, finska, finska i Sverige, öppna data, Språkrådet, ISOF"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
        </head>
     </html>
     """.format(css=css)
     header = re.sub('[\n\t]', '', header)
     doc = etree.fromstring(header.encode('utf8'))
     body = etree.SubElement(doc, 'body')
-    # Don't use title
-    # title = etree.SubElement(body, 'div', {"class": "title clearfix"})
-    # titles = set()
+    #  Don't use title
+    #  title = etree.SubElement(body, 'div', {"class": "title clearfix"})
+    #  titles = set()
     if objs:
         logging.debug('will format, start with %s', objs[0])
     main = etree.SubElement(body, 'div', {"class": "main"})
     for obj in objs:
         # make one html entry for every subtype (sakområde)
         for subtype in obj.get('subtype', ["-"]):
-            #titles.add(subtype.title())
+            # titles.add(subtype.title())
             uppslag = etree.SubElement(main, 'div', {"class": "uppslag"})
             p = etree.SubElement(uppslag, 'p', {"class": "lex"})
             lexem = etree.SubElement(p, 'span', {"class": "lexem"})
@@ -111,17 +110,17 @@ def termswefin(objs, css=''):
     logging.debug(root)
     logging.debug(type(root))
     root = '<!DOCTYPE html>\n' + root
-    return len(objs), root #.encode('utf8')
+    return len(objs), root  # .encode('utf8')
 
 
 def escape(string, tail=True):
-    " Help format strings "
+    """Help format strings."""
     tail = ' ' if tail else ''
     return string.strip() + tail
 
 
 def default(obj, toformat):
-    " Default translation to html (do nothing) "
+    """Give default translation to html (do nothing)."""
     return 0, "no translation available"
 
 
@@ -129,4 +128,4 @@ mode_conv = {"term-swefin": termswefin,
              # In the future, yiddish will probably need it's on convertion.
              # For now, use swef-fin.
              "term-sweyid": termswefin,
-            }
+             }

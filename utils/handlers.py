@@ -1,4 +1,4 @@
-""" Request handlers are defined here """
+"""Request handlers are defined here."""
 import json
 import logging
 import os
@@ -11,10 +11,10 @@ import utils.errors as errors
 
 
 class BaseHandler(tornado.web.RequestHandler):
-    """ Base Handler. """
+    """Base Handler."""
 
     def prepare(self):
-        """ Set up file system """
+        """Set up file system."""
         try:
             for mode in settings.get_modes():
                 if mode == 'default':
@@ -29,20 +29,19 @@ class BaseHandler(tornado.web.RequestHandler):
         except errors.ConfigurationError as error:
             self.return_error(error)
 
-
     def options(self, *args, **kwargs):
-        """ Option call: do nothing """
+        """Option call: do nothing."""
         self.set_status(204)
         self.finish()
 
     def set_default_headers(self):
-        """ Set headers, alllowing cors """
+        """Set headers, alllowing cors."""
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "x-requested-with,content-type,authorization")
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
 
     def return_error(self, error):
-        """ Return an error and finish the call """
+        """Return an error and finish the call."""
         self.set_status(error.code)
         self.set_header('Content-Type', 'text/plain')
         self.write({"error": error.message})
@@ -50,10 +49,10 @@ class BaseHandler(tornado.web.RequestHandler):
 
 
 class SafeHandler(BaseHandler):
-    """ Handlers where authentication can be added """
+    """Handlers where authentication can be added."""
 
     def authenticate(self, mode):
-        """ Authenticate to Karp. """
+        """Authenticate to Karp.."""
         try:
             auth_header = self.request.headers.get('Authorization')
             basic = auth_header[6:]
@@ -62,7 +61,7 @@ class SafeHandler(BaseHandler):
             req.add_header('Authorization', 'Basic %s' % basic)
             response = json.loads(urllib.request.urlopen(req).read().decode('utf8'))
             ok = response["authenticated"]
-        except:
+        except Exception:
             ok = False
         if not ok:
             logging.debug('Bad username or password?')
@@ -77,8 +76,7 @@ class SafeHandler(BaseHandler):
                 error = errors.AuthenticationError("You are not allowed to edit the resource")
                 self.return_error(error)
 
-
     def options(self, *args, **kwargs):
-        """ Options call: do nothing """
+        """Options call: do nothing."""
         self.set_status(204)
         self.finish()

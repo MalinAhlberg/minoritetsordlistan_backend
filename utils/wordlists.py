@@ -1,4 +1,4 @@
-""" Module for creating queries to Karp and keeping track of published subtypes """
+"""Module for creating queries to Karp and keeping track of published subtypes."""
 import base64
 import json
 import logging
@@ -12,9 +12,10 @@ import utils.convert as convert
 
 
 class Info(handlers.BaseHandler):
-    """ Return general information """
+    """Return general information."""
+
     # TODO add example calls here!
-    def get(self):
+    def get(self):  # noqa: ignore=102
         info = ['Minoritetsordlistans API.']
 
         self.write({
@@ -23,8 +24,9 @@ class Info(handlers.BaseHandler):
 
 
 class CSSHandler(handlers.BaseHandler):
-    """ Proxy for css files """
-    def get(self, *args):
+    """Proxy for css files."""
+
+    def get(self, *args):  # noqa: ignore=102
         mode = self.get_query_argument('mode', settings.get('mode'))
         full_url = settings.get('css', mode)
         req = urllib.request.Request(full_url)
@@ -33,9 +35,9 @@ class CSSHandler(handlers.BaseHandler):
 
 
 class PublishHandler(handlers.SafeHandler):
-    """ Publish a subtype """
+    """Publish a subtype."""
 
-    def get(self, *args):
+    def get(self, *args):  # noqa: ignore=102
         mode = self.get_query_argument('mode', settings.get('mode'))
         self.authenticate(mode)
         subtype = args[0]
@@ -48,9 +50,9 @@ class PublishHandler(handlers.SafeHandler):
 
 
 class UnpublishHandler(handlers.SafeHandler):
-    """ Unpublish a subtype """
+    """Unpublish a subtype."""
 
-    def get(self, *args):
+    def get(self, *args):  # noqa: ignore=102
         mode = self.get_query_argument('mode', settings.get('mode'))
         self.authenticate(mode)
         subtype = args[0]
@@ -63,8 +65,9 @@ class UnpublishHandler(handlers.SafeHandler):
 
 
 class SubtypeHandler(handlers.BaseHandler):
-    """ Return subtype information """
-    def get(self):
+    """Return subtype information."""
+
+    def get(self):  # noqa: ignore=102
         unpublished = self.get_query_argument('unpublished', False)
         mode = self.get_query_argument('mode', settings.get('mode'))
         subtypes = get_subtypes(mode)
@@ -78,20 +81,21 @@ class SubtypeHandler(handlers.BaseHandler):
 
 
 class ModeHandler(handlers.BaseHandler):
-    """ Return mode information """
-    def get(self):
+    """Return mode information."""
+
+    def get(self):  # noqa: ignore=102
         modes = settings.get_modes()
         self.write({'modes': list(modes)})
 
 
 class SearchHandler(handlers.BaseHandler):
-    """ Return general information """
+    """Return general information."""
 
-    def get(self):
+    def get(self):  # noqa: ignore=102
         answer = []
         logging.debug(' * Searching!')
         mode = self.get_query_argument('mode', settings.get('mode'))
-        if not mode in settings.get_modes():
+        if mode not in settings.get_modes():
             message = "Unknown mode: {}. Available: {}".format(mode, ', '.join(settings.get_modes()))
             error = errors.ConfigurationError(message, code=400)
             self.return_error(error)
@@ -164,6 +168,7 @@ class SearchHandler(handlers.BaseHandler):
 
 
 def make_call(url, params, mode):
+    """Make a query to the given url, using credintials from the given mode."""
     data = urllib.parse.urlencode(params)
     logging.debug('data %s', params)
     full_url = url % data
@@ -176,7 +181,7 @@ def make_call(url, params, mode):
 
 
 def build_query(word, subtypes, contains, lang, mode):
-    """ Construct the query string to Karp """
+    """Construct the query string to Karp."""
     wordfield = settings.get('baseform.search', mode)
     if lang != settings.get('sourcelanguage', mode):
         wordfield = settings.get('targetform.search', mode)
@@ -204,6 +209,11 @@ def build_query(word, subtypes, contains, lang, mode):
 
 
 def limit_query(subtypes, lang, mode):
+    """Check if the result of the query is too big, if so limit the search.
+
+    Get the length of the response from Karp. If it is bigger than `overflowsize`,
+    return one letter to limit the search to. Otherwise return an empty string.
+    """
     url = settings.karp + '/query?%s'
     params = {'resource': settings.get('resource', mode),
               'mode': settings.get('mode', mode),
@@ -215,19 +225,18 @@ def limit_query(subtypes, lang, mode):
     return ''
 
 
-
 def get_subtypes(mode):
-    """ Read all subtypes for this mode from file """
+    """Read all subtypes for this mode from file."""
     return [s.strip() for s in open(settings.get('subtypes', mode), encoding='utf-8').readlines() if s]
 
 
 def update_subtypes(subtypes, mode):
-    """ Update the subtypes file """
+    """Update the subtypes file."""
     open(settings.get('subtypes', mode), encoding='utf-8', mode='w').write('\n'.join(subtypes))
 
 
 def get_karp_subtypes(mode):
-    """ Ask Karp about all available subtypes """
+    """Ask Karp about all available subtypes."""
     logging.debug(' * Searching!')
     url = settings.karp + '/statlist?%s'
     size = settings.get('overflowsize', 1000)
@@ -252,7 +261,7 @@ def get_karp_subtypes(mode):
 
 
 def filter_public_subtypes(wanted, mode):
-    """ Get the subtypes as specified by the user """
+    """Get the subtypes as specified by the user."""
     existing_subtypes = set(get_subtypes(mode))
     if not wanted:
         return list(existing_subtypes)
@@ -261,7 +270,7 @@ def filter_public_subtypes(wanted, mode):
 
 
 def add_credentials(request, mode):
-    """ Prepare a request by adding login credentials """
+    """Prepare a request by adding login credentials."""
     credentials = ('%s:%s' % (settings.get('username', mode), settings.get('password', mode)))
     encoded_credentials = base64.b64encode(credentials.encode('ascii'))
     request.add_header('Authorization', 'Basic %s' % encoded_credentials.decode("ascii"))

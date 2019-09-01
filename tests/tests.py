@@ -1,4 +1,4 @@
-" Basics tests for the backend "
+"""Basics tests for the backend."""
 import json
 from tornado.httputil import url_concat
 from tornado.testing import AsyncHTTPTestCase
@@ -9,16 +9,20 @@ import route
 
 
 class TestBackend(AsyncHTTPTestCase):
+    """Test the backend. To be improved."""
+
     def get_app(self):
+        """Get the application to test."""
         settings = {}
         return route.Application(settings)
 
     def test_info(self):
+        """Test that the info call works."""
         response = self.fetch('/')
         self.assertEqual(response.code, 200)
 
     def test_unauth_pub(self):
-        """ Try publish/unpublish without being logged in """
+        """Try publish/unpublish without being logged in."""
         key_arg = {"mode": "test"}
         subtype = 'unpub'
         url = url_concat('/publish/'+subtype, key_arg)
@@ -30,7 +34,7 @@ class TestBackend(AsyncHTTPTestCase):
         self.assertNotIn(subtype, published)
 
     def test_unauth_unpub(self):
-        """ Try publish/unpublish without being logged in """
+        """Try publish/unpublish without being logged in."""
         key_arg = {"mode": "test"}
         subtype = 'pub'
         # TODO add pub to subtypes file
@@ -43,7 +47,7 @@ class TestBackend(AsyncHTTPTestCase):
         self.assertIn(subtype, published)
 
     def test_query(self):
-        """ Check search for muminfigurer in swedish and finnsh """
+        """Check search for muminfigurer in swedish and finnsh."""
         # get muminfigurer, order by swedish
         subtype = 'muminfigurer'
         key_arg = {"mode": "term-swefin", 'subtypes': subtype}
@@ -67,7 +71,7 @@ class TestBackend(AsyncHTTPTestCase):
         self.assertNotEqual(hits, fi_hits)
 
     def test_word_query(self):
-        """ Check search for muminfigurer in swedish and finnsh """
+        """Check search for muminfigurer in swedish and finnsh."""
         # get muminfigurer, order by swedish
         subtype = 'muminfigurer'
         q = 'muminmamman'
@@ -101,7 +105,7 @@ class TestBackend(AsyncHTTPTestCase):
         self.assertEqual(len(hits), len(upper_hits))
 
     def test_subtypes(self):
-        """ Check search for muminfigurer in swedish and finnsh """
+        """Check search for muminfigurer in swedish and finnsh."""
         key_arg = {"mode": "test"}
         url = url_concat('/subtypes', key_arg)
         response = self.fetch(url)
@@ -109,7 +113,7 @@ class TestBackend(AsyncHTTPTestCase):
         self.assertIn('subtypes', json.loads(response.body))
 
     def test_html_conv(self):
-        """ Check search for muminfigurer in swedish and finnsh """
+        """Check search for muminfigurer in swedish and finnsh."""
         # get muminfigurer, order by swedish
         subtype = 'muminfigurer'
         q = 'muminmamman'

@@ -1,4 +1,4 @@
-""" Main module, this is where the applications routes are specified """
+"""Main module, this is where the applications routes are specified."""
 import logging
 import tornado.httpserver
 import tornado.ioloop
@@ -12,16 +12,17 @@ define("develop", default=False, help="Run in develop environment", type=bool)
 
 
 # Setup the Tornado Application
-tornado_settings = {
-    "debug": False,
-    }
+tornado_settings = {"debug": False}
 
 
 class Application(tornado.web.Application):
+    """The main application."""
+
     def __init__(self, settings):
+        """Set up routes."""
         self.declared_handlers = [
-            (r"/",         wordlists.Info),
-            (r"/search",   wordlists.SearchHandler),
+            (r"/", wordlists.Info),
+            (r"/search", wordlists.SearchHandler),
             (r"/subtypes", wordlists.SubtypeHandler),
             (r"/modes", wordlists.ModeHandler),
             (r"/publish/(.*)", wordlists.PublishHandler),
