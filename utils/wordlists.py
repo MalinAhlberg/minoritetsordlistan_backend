@@ -67,7 +67,11 @@ class SubtypeHandler(handlers.BaseHandler):
     def get(self):
         unpublished = self.get_query_argument('unpublished', False)
         mode = self.get_query_argument('mode', settings.get('mode'))
-        subtypes = get_subtypes(mode)
+        try:
+            subtypes = get_subtypes(mode)
+        except errors.ConfigurationError:
+            logging.debug('asked for subtypes of unpublished mode')
+            subtypes = []
         logging.debug(' * Subtypes %s' % subtypes)
         if unpublished in [True, "true", "True"]:
             all_subtypes = get_karp_subtypes(mode)
