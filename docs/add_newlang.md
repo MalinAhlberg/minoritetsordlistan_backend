@@ -19,7 +19,7 @@ A entry for a wordlist looks like this:
   }
   ```
 
-The name of the entry (`term-swefin`) is the internal name, used for the backend. **TODO** should this match something in the frontend?
+The name of the entry (`term-swefin`) is the internal name, used for the backend.
 
 All possible fields are described below. Most fields have default values (listed in grey), which will be used if the field is left out from the configuration.
 
@@ -36,7 +36,7 @@ All possible fields are described below. Most fields have default values (listed
 - `password`: Karp password `psw`
 - `maxsize`: maximum number of entries to list in the reply of a query `500`
 - `maxsize_export`: maximum number of entries to list when doing an export (for example, when creating html pages) `50000`
-- `overflowsize`: For avoiding getting to big responses from Karp. If
+- `overflowsize`: For avoiding getting too big responses from Karp. If
   the number of entries matching a query exceeds this limit, only ask Karp for
   the words starting with 'a' (or a given symbol, see below). `1000`
 - `standard_first_letter`: the first letter of the alphabet of the source languge. Used with `overflowsize`. `"a"`
