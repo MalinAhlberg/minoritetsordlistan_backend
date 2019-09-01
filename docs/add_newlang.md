@@ -25,7 +25,7 @@ All possible fields are described below. Most fields have default values (listed
 
 - `resource`: the name of the resource, must be the same as in Karp.
 - `languages`: the language codes of the resource. Should match the languages as given in Karp and in the frontend. `["sv", "fi"]`
-- `sourcelanguage`: the default source language (as given in Karp and the frontend) `"sv"`
+- `sourcelanguage`: the default source language (as given in the frontend) `"sv"`
 - `targetsort`: the name of the field, as given in Karp, to sort the target language by. `"targetform.sort"`
 - `baseform.search`: the name of the field, as given in Karp, to search for baseforms of the source language.
 - `targetform.search`: the name of the field, as given in Karp, to search for baseforms of the target language.
