@@ -9,6 +9,7 @@
     "maxsize": 500,
     "maxsize_export": 50000,
     "overflowsize": 1000,
+    "baseform.search": "baseform.searchraw",
     "standard_first_letter": "a",
     "css": "http://liljeholmen.sprakochfolkminnen.se/KARPexport_Fi-ordlista_HTML.css",
     "targetsort": "targetform.sort",
@@ -18,11 +19,40 @@
     "resource": "term-swefin",
     "languages": ["sv", "fi"],
     "sourcelanguage": "sv",
-    "targetsort": "targetform.sort",
-    "baseform.search": "baseform.searchraw",
     "targetform.search": "targetform.searchraw",
     "mode": "term-swefin",
-    "subtypes": "data/fin-subtypes.txt",
-    "css": "http://liljeholmen.sprakochfolkminnen.se/KARPexport_Fi-ordlista_HTML.css"
+    "subtypes": "data/fin-subtypes.txt"
+  },
+  "term-swearli": {
+    "resource": "term-swearli",
+    "languages": ["sv", "arli"],
+    "sourcelanguage": "sv",
+    "targetform.search": "targetform.searchraw",
+    "mode": "term-swearli",
+    "subtypes": "data/arli-subtypes.txt"
+  },
+  "term-swekalderas": {
+    "resource": "term-swekalderas",
+    "languages": ["sv", "kalderas"],
+    "sourcelanguage": "sv",
+    "targetform.search": "targetform.searchraw",
+    "mode": "term-swekalderas",
+    "subtypes": "data/kalderas-subtypes.txt"
+  },
+  "term-swekale": {
+    "resource": "term-swekale",
+    "languages": ["sv", "kale"],
+    "sourcelanguage": "sv",
+    "targetform.search": "targetform.searchraw",
+    "mode": "term-swekale",
+    "subtypes": "data/kale-subtypes.txt"
+  },
+  "term-swelovari": {
+    "resource": "term-swelovari",
+    "languages": ["sv", "lovari"],
+    "sourcelanguage": "sv",
+    "targetform.search": "targetform.searchraw",
+    "mode": "term-swelovari",
+    "subtypes": "data/lovari-subtypes.txt"
   }
 }
