@@ -1,4 +1,4 @@
-""" Settings! """
+"""Parse and handle the settings."""
 import json
 import os
 
@@ -12,7 +12,9 @@ default_conf = json.load(open(os.path.join(path, 'settings_default.json'), encod
 karp = 'https://ws.spraakbanken.gu.se/ws/karp/v5'
 ok_status = 'granskat och klart'
 
+
 def get_modes():
+    """Parse mode from config file."""
     modes = set(conf.keys())
     for mode in default_conf.keys():
         modes.add(mode)
@@ -21,10 +23,22 @@ def get_modes():
 
 
 def lookup(key):
+    """Lookup a setting, return the default value if no value is set."""
     return conf.get(key, default_conf[key])
 
 
 def get(key, mode="default", default=None):
+    """
+    Get the value for a key, searching all available settings.
+
+    Strategy:
+    1. Find the stated value for this mode.
+    2. Find the stated value in the default mode.
+    3. Find the stated value for this mode in the default settings.
+    4. Find the stated value for the default mode in the default mode.
+    5. Return the default input argument
+    6. Raise an error
+    """
     if key in conf.get(mode, {}):
         return conf[mode][key]
     if key in conf.get('default'):
@@ -39,6 +53,7 @@ def get(key, mode="default", default=None):
 
 
 def get_first_letter(lang, mode):
+    """Get the first letter (alphabetically) for this mode."""
     if lang in get('first_letter', mode, {}):
         return get('first_letter', mode)[lang]
     return get('standard_first_letter', default='a')

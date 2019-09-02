@@ -1,7 +1,9 @@
-""" All errors raised by the application should be here """
+"""All errors raised by the application should be here."""
+
 
 class ConfigurationError(Exception):
-    """ The settings for the requested mode is not ok """
+    """The settings for the requested mode is not ok."""
+
     message = "No configuaration"
     code = 500
 
@@ -14,7 +16,8 @@ class ConfigurationError(Exception):
 
 
 class AuthenticationError(Exception):
-    """ The settings for the requested mode is not ok """
+    """The settings for the requested mode is not ok."""
+
     message = "Authentication failed. "
     code = 401
 
@@ -24,7 +27,8 @@ class AuthenticationError(Exception):
 
 
 class QueryError(Exception):
-    """ The settings for the requested mode is not ok """
+    """The settings for the requested mode is not ok."""
+
     message = "Search failed. "
     code = 400
 
